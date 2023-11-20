@@ -7,7 +7,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//Inserir a string que conexão
+//Configurar o "Context" para se comunicar com o banco de dados
 string SqlConnection = builder.Configuration.GetConnectionString("ConexaoPadrao");
 
 builder.Services.AddDbContext<ApiCatalogoContext>(options => options.UseMySql(SqlConnection, 
