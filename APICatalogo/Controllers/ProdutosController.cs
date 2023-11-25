@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using APICatalogo.Context;
 using APICatalogo.Domain;
+using Microsoft.EntityFrameworkCore;
+
 namespace APICatalogo.Controllers
 {
     [ApiController]
@@ -26,7 +28,7 @@ namespace APICatalogo.Controllers
             return produtos;
         }
 
-        //Action que retornar um produto pelo id
+        //Action que retorna um produto pelo id
         [HttpGet("{id:int}", Name = "ObterProduto")]
         public ActionResult<Produto> Get(int id)
         {
@@ -49,6 +51,19 @@ namespace APICatalogo.Controllers
             _context.Produtos.Add(produto);
             _context.SaveChanges();
             return new CreatedAtRouteResult("ObterProduto", new { id = produto.ProdutoId}, produto);
+        }
+
+        //Action para atualizar um produto
+        [HttpPut("{id:int}")]
+        public ActionResult Put(int id, Produto produto)
+        {
+            if (id != produto.ProdutoId)
+            {
+                return BadRequest();
+            }
+            _context.Entry(produto).State = EntityState.Modified;
+            _context.SaveChanges();
+            return Ok(produto);
         }
     }
 }
