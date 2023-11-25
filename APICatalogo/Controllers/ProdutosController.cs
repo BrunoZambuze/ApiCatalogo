@@ -27,7 +27,7 @@ namespace APICatalogo.Controllers
         }
 
         //Action que retornar um produto pelo id
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:int}", Name = "ObterProduto")]
         public ActionResult<Produto> Get(int id)
         {
             var produto = _context.Produtos.FirstOrDefault(p=> p.ProdutoId == id);
@@ -36,6 +36,19 @@ namespace APICatalogo.Controllers
                 return NotFound("Produto não encontrado...");
             }
             return produto;
+        }
+
+        //Action para criar um novo produto
+        [HttpPost]
+        public ActionResult Post(Produto produto)
+        {
+            if (produto is null)
+            {
+                return BadRequest();
+            }
+            _context.Produtos.Add(produto);
+            _context.SaveChanges();
+            return new CreatedAtRouteResult("ObterProduto", new { id = produto.ProdutoId}, produto);
         }
     }
 }
